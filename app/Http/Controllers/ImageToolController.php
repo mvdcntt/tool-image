@@ -16,28 +16,26 @@ class ImageToolController extends Controller
     {
         $image = $request->file('image');
         if ($image) {
+            $path = $image->getRealPath();
             $name = $image->getClientOriginalName();
             $ext = $image->getClientOriginalExtension();
+            $name = str_replace( '.' . $ext, '', $name);
 
-            $nameNoExt = str_replace($ext, '', $name);
-            $nameNoExt = str_replace('.', '', $nameNoExt);
+            $targetPath = public_path('/converted') . '/' . $name;
 
-            $mime = $image->getMimeType();
-            if ($mime != 'image/png') {
-                return;
+            if (! File::isDirectory(public_path('/converted'))) {
+                File::makeDirectory(public_path('/converted'));
             }
-            $path = $image->getRealPath();
-            shell_exec("convert {$path} -bordercolor none -border 1 -background white -alpha background -bordercolor white " . public_path('converted/image_border.png'));
-            shell_exec("convert " . public_path('converted/image_border.png') . " -alpha off -negate -threshold 0 -type bilevel " . public_path('converted/image_border0.png'));
+
+            if (! File::isDirectory(public_path('/converted/' . $name))) {
+                File::makeDirectory(public_path('/converted/' . $name));
+            }
+
+            shell_exec("convert {$path} -bordercolor none -border 1 -background white -alpha background -bordercolor white " . $targetPath . '/image_border.png');
+            shell_exec("convert " . $targetPath . '/image_border.png' . " -alpha off -negate -threshold 0 -type bilevel " . $targetPath . '/image_border0.png');
             $old_path = getcwd();
-            $target_path = public_path('/converted/' . $nameNoExt);
-
-            if (! File::isDirectory($target_path)) {
-                File::makeDirectory($target_path);
-            }
-
-            chdir(public_path('/scripts'));
-            exec("./script.sh $target_path, $nameNoExt");
+            chdir(public_path('scripts'));
+            shell_exec('bash script.sh ' .  $targetPath);
             chdir($old_path);
         }
     }
