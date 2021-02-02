@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-
-Route::get('/tool-image', [ImageToolController::class, 'index']);
+Route::get('/', [ImageToolController::class, 'index']);
 Route::post('/tool-image', [ImageToolController::class, 'upload']);

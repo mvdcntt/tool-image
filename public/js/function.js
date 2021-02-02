@@ -38,6 +38,7 @@ function selectFolder(element) {
 }
 
 function processUploadSingleFile(file) {
+    $('#loading').show();
     if (typeof file != "undefined") {
         let data = new FormData();
         data.append('image', file);
@@ -50,14 +51,18 @@ function processUploadSingleFile(file) {
             processData: false,
             contentType: false,
             success: function (res) {
+                $('#loading').hide();
                 uploadIndex ++;
                 let file = uploadImages[uploadIndex];
                 processUploadSingleFile(file);
             }, error: function (xhr, statusText, errorThrown) {
-
+                $('#loading').hide();
             }
         });
+    } else {
+        $('#loading').hide();
     }
+
 }
 
 function clearInput() {
