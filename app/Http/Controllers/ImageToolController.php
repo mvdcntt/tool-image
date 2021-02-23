@@ -23,20 +23,26 @@ class ImageToolController extends Controller
             $ext = $image->getClientOriginalExtension();
             $name = str_replace( '.' . $ext, '', $name);
 
-            $targetPath = public_path('/converted') . '/' . $name;
-
-            if (! File::isDirectory(public_path('/converted'))) {
-                File::makeDirectory(public_path('/converted'));
-            }
-
-            if (! File::isDirectory(public_path('/converted/' . $name))) {
-                File::makeDirectory(public_path('/converted/' . $name));
-            }
-
             $direction = $request->get('direction');
 
             if (! isset($direction)) {
                 $direction = 'all';
+
+                $targetPath = public_path('/converted') . '/' . $name;
+
+                if (! File::isDirectory(public_path('/converted'))) {
+                    File::makeDirectory(public_path('/converted'));
+                }
+
+                if (! File::isDirectory(public_path('/converted/' . $name))) {
+                    File::makeDirectory(public_path('/converted/' . $name));
+                }
+            } else {
+                $targetPath = public_path('/image_trimmed/');
+                if (! File::isDirectory(public_path('/image_trimmed'))) {
+                    File::makeDirectory(public_path('/image_trimmed'));
+                }
+
             }
 
             if ($direction == 'all') {
