@@ -67,20 +67,20 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="direction" id="all" value="all" checked>
                         <label class="form-check-label" for="all">
-                            Cắt theo cả 2 chiều ngang và dọc
+                            Cắt mặc đinh
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="direction" id="horizontal"
                                value="horizontal">
                         <label class="form-check-label" for="horizontal">
-                            Theo chiều dọc
+                            Cắt ảnh riêng lẻ chiều dọc
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="direction" id="vertical" value="vertical">
                         <label class="form-check-label" for="vertical">
-                            Theo chiều ngang
+                            Cắt ảnh riêng lẻ chiều ngang
                         </label>
                     </div>
                 </div>
