@@ -31,12 +31,32 @@ class ImageToolController extends Controller
                 File::makeDirectory(public_path('/converted/' . $name));
             }
 
-            shell_exec("convert {$path} -bordercolor none -border 1 -background white -alpha background -bordercolor white " . $targetPath . '/image_border.png');
-            shell_exec("convert " . $targetPath . '/image_border.png' . " -alpha off -negate -threshold 0 -type bilevel " . $targetPath . '/image_border0.png');
-            $old_path = getcwd();
-            chdir(public_path('scripts'));
-            shell_exec('bash script.sh ' .  $targetPath);
-            chdir($old_path);
+            $direction = $request->get('direction');
+
+            if (! isset($direction)) {
+                $direction = 'all';
+            }
+
+            if ($direction == 'all') {
+                shell_exec("convert {$path} -bordercolor none -border 1 -background white -alpha background -bordercolor white " . $targetPath . '/image_border.png');
+                shell_exec("convert " . $targetPath . '/image_border.png' . " -alpha off -negate -threshold 0 -type bilevel " . $targetPath . '/image_border0.png');
+                $old_path = getcwd();
+                chdir(public_path('scripts'));
+                shell_exec('bash script.sh ' .  $targetPath);
+                chdir($old_path);
+            } elseif ($direction == 'vertical') {
+                shell_exec("convert \( {$path} -bordercolor none -border 1x0 \) \
+                    -size 1x1 xc:black -gravity west -composite \
+                    -size 1x1 xc:black -gravity east -composite \
+                    -fuzz 10% -trim +repage -bordercolor none -shave 1x0 \
+                    " . $targetPath . '/' . $name .'.'. $ext);
+            } elseif ($direction == 'horizontal') {
+                shell_exec("convert \( {$path} -bordercolor none -border 0x1 \) \
+                    -size 1x1 xc:black -gravity north -composite \
+                    -size 1x1 xc:black -gravity south -composite \
+                    -fuzz 10% -trim +repage -bordercolor none -shave 0x1 \
+                     " . $targetPath . '/' . $name .'.'. $ext);
+            }
         }
     }
 }

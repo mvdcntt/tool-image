@@ -40,9 +40,11 @@ function selectFolder(element) {
 function processUploadSingleFile(file) {
     $('#loading').show();
     if (typeof file != "undefined") {
+        let direction = $('[name="direction"]:checked').val();
         let data = new FormData();
         data.append('image', file);
         data.append('_token', CSRF);
+        data.append('direction', direction);
 
         $.ajax({
             type: 'post',
