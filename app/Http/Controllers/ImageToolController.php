@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ImageToolController extends Controller
 {
@@ -18,6 +19,7 @@ class ImageToolController extends Controller
         if ($image) {
             $path = $image->getRealPath();
             $name = $image->getClientOriginalName();
+            $name = Str::slug($name);
             $ext = $image->getClientOriginalExtension();
             $name = str_replace( '.' . $ext, '', $name);
 
